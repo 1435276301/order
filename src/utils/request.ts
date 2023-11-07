@@ -3,7 +3,7 @@ const baseUrl = '127.0.0.1:3030'
 // 拦截器配置
 const httpInterceptor = {
 	// 拦截前触发
-	invoke(options: { url: string; timeout: number; header: any }) {
+	invoke(options: any) {
 		// 1.非http开头需拼接地址
 		if (!options.url.startsWith('http')) {
 			options.url = baseUrl + options.url
