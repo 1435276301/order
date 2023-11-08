@@ -7,7 +7,6 @@
 			"^u-([^-].*)": "uview-plus/components/u-$1/u-$1.vue"
 		}
 	},
-
 	"pages": [
 		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
@@ -22,5 +21,32 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
-	}
+	},
+	"subPackages": [
+		{
+			"root": "page",
+			"pages": [
+				{
+					"path": "tableNumber/tableNumber",
+					"style": {
+						"navigationBarTitleText": "桌号",
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "menu/menu",
+					"style": {
+						"navigationBarTitleText": "刘哥餐饮店",
+						"navigationBarBackgroundColor": "#fcd25e"
+					}
+				},
+				{
+					"path": "orderDetails/orderDetails",
+					"style": {
+						"navigationBarTitleText": "订单详情"
+					}
+				}
+			]
+		}
+	]
 }
