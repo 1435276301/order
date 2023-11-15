@@ -7,43 +7,65 @@
 		</view>
 		<!-- 餐品详情 -->
 
-		<view class="menuDetail">
+		<view class="menuDetail" v-for="item in orderList" :key="item">
 			<view class="help">
-				<view>第1次下单</view>
+				<view>第{{ item.count }}次下单</view>
 				<view>下单成功，坐等开吃</view>
 			</view>
 			<u-read-more showHeight="300" toggle closeText="展开全部" color="#555" :shadowStyle="{ backgroundImage: 'none' }" textIndent="5">
-				<view class="content" v-for="item in 10" :key="item">
+				<view class="content" v-for="children in item.children" :key="children">
 					<view class="img">
-						<image src="../../assets/logo.png" mode="aspectFit" />
+						<image :src="children.image" mode="aspectFit" />
 						<view class="title">
-							<view class="name">江小白</view>
-							<view>1瓶</view>
+							<view class="name">{{ children.name }}</view>
+							<view>{{ children.count }}{{ children.unit }}</view>
 						</view>
 					</view>
-					<view class="price">￥36</view>
+					<view class="price">￥{{ children.price }}</view>
 				</view>
 			</u-read-more>
 			<view class="count">
-				<view>共 5 份 总计</view>
-				<view><text>￥101.00</text></view>
+				<view>共 {{ item.children?.length }} 份 总计</view>
+				<view
+					><text>￥{{ item.price }}</text></view
+				>
 			</view>
 		</view>
 
 		<!-- 订单详情 -->
 		<view class="orderDetail">
-			<view>订单编号：111111111111111</view>
-			<view>下单时间：2023-11-08 16:02:01</view>
-			<view>桌台名称：001</view>
+			<view>订单编号：{{ order?.orderNumber }}</view>
+			<view>下单时间：{{ order?.time }}</view>
+			<view>桌台名称：{{ order?.table }}</view>
 		</view>
 		<!-- 订单操作 -->
 		<view class="orderOperation">
-			<view class="btn"><button>加菜</button></view>
+			<view class="btn"><button @tap="goAddDishes">加菜</button></view>
 		</view>
 	</view>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { updateSoldCountAPI } from '@/api/menu'
+
+const order = ref()
+const orderList = ref<any>([])
+onLoad((options) => {
+	order.value = JSON.parse(decodeURIComponent(options!.order))
+
+	orderList.value = JSON.parse(order.value.orderList).reverse()
+	orderList.value.forEach((item: any) => {
+		item.children.forEach(async (item1: any) => {
+			item1.sold = item1.count
+			await updateSoldCountAPI(item1.id, item1.sold)
+		})
+	})
+})
+
+const goAddDishes = () => {
+	uni.navigateBack()
+}
+</script>
 
 <style scoped lang="scss">
 .orderDetails {

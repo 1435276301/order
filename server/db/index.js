@@ -4,7 +4,7 @@ const db = mysql.createPool({
 	host: '127.0.0.1',
 	user: 'root',
 	password: 'root',
-	database: 'uniapp',
+	database: 'table119'
 })
 
 module.exports = db

@@ -9,9 +9,9 @@
 		<view class="body">
 			<view class="item">
 				<view style="font-size: 22px; font-weight: 1000; color: black">您好，请选择就餐人数</view>
-				<view>桌号:001</view>
+				<view>桌号:{{ scene }}</view>
 				<scroll-view scroll-x class="scroll">
-					<view v-for="(item, index) in 6" :key="item" :class="{ active: index === isActive }" class="people" @tap="isActive = index"
+					<view v-for="(item, index) in 6" :key="item" :class="{ active: index === isActive }" class="people" @tap="numberOfPeople(item, index)"
 						>{{ item }}
 					</view>
 				</scroll-view>
@@ -21,26 +21,55 @@
 			</view>
 		</view>
 	</view>
+
+	<Loading :loading="loading" />
 </template>
 
 <script lang="ts" setup>
+import { addUserAPI } from '@/api/user'
+import Loading from '@/components/Loading.vue'
+const count = ref(1)
+const numberOfPeople = (item: number, index: number) => {
+	count.value = item
+	isActive.value = index
+}
+const loading = ref(false)
+const scene = ref()
 onLoad((query) => {
-	const scene = decodeURIComponent(query!.scene)
-	console.log(scene)
+	const number = decodeURIComponent(query!.scene)
+	scene.value = number
 })
 const isActive = ref(0)
-const getUserInfo = () => {
-	uni.getUserProfile({
-		desc: '获取用户信息',
-		success: (res) => {
-			console.log(1, res)
-
-			uni.login({
+const getUserInfo = async () => {
+	if (!uni.getStorageSync('token')) {
+		await new Promise((resolve) => {
+			uni.getUserProfile({
+				desc: '获取用户信息',
 				success: (res) => {
-					console.log(2, res)
-				},
+					console.log(res)
+
+					uni.login({
+						success: (res) => {
+							uni
+								.request({
+									url:
+										'https://api.weixin.qq.com/sns/jscode2session?appid=wxc9051b6bfbad3812&secret=931489be1ef8678add17db4f8c5927f3&grant_type=authorization_code&js_code=' +
+										res.code
+								})
+								.then(async (res) => {
+									loading.value = true
+									resolve(uni.setStorageSync('token', (res.data as any).openid))
+									await addUserAPI(uni.getStorageSync('token'))
+									loading.value = false
+								})
+						}
+					})
+				}
 			})
-		},
+		})
+	}
+	uni.navigateTo({
+		url: `../menu/menu?scene=${scene.value}&count=${count.value}`
 	})
 }
 </script>

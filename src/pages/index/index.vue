@@ -16,7 +16,7 @@ const onScan = () => {
 	uni.scanCode({
 		success: (success) => {
 			console.log(success)
-		},
+		}
 	})
 }
 const accToken = ref()
@@ -24,7 +24,7 @@ const getScan = () => {
 	uni
 		.request({
 			url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc9051b6bfbad3812&secret=931489be1ef8678add17db4f8c5927f3',
-			method: 'GET',
+			method: 'GET'
 		})
 		.then((res) => {
 			accToken.value = (res.data as { access_token: string }).access_token
@@ -36,8 +36,8 @@ const getScan = () => {
 					scene: '1',
 					env_version: 'trial',
 					width: 280,
-					check_path: false,
-				},
+					check_path: false
+				}
 			})
 		})
 }

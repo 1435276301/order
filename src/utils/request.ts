@@ -1,5 +1,5 @@
 // 请求基地址
-const baseUrl = '127.0.0.1:3030'
+const baseUrl = 'http://127.0.0.1:3030'
 // 拦截器配置
 const httpInterceptor = {
 	// 拦截前触发
@@ -13,9 +13,9 @@ const httpInterceptor = {
 		// 3.添加小程序请求头表示
 		options.header = {
 			'source-client': 'miniapp',
-			...options.header,
+			...options.header
 		}
-	},
+	}
 }
 // 拦截 request 请求
 uni.addInterceptor('request', httpInterceptor)
@@ -36,10 +36,10 @@ uni.addInterceptor('request', httpInterceptor)
 type Data<T> = {
 	code: string
 	msg: string
-	result: T
+	data: T
 }
 // 2.2 添加类型，支持泛型
-export const request = <T>(options: UniApp.RequestOptions) => {
+const request = <T>(options: UniApp.RequestOptions) => {
 	// 1. 返回 Promise 对象
 	return new Promise<Data<T>>((resolve, reject) => {
 		uni.request({
@@ -49,26 +49,28 @@ export const request = <T>(options: UniApp.RequestOptions) => {
 				// 状态码 2xx，参考 axios 的设计
 				if (res.statusCode >= 200 && res.statusCode < 300) {
 					// 2.1 提取核心数据 res.data
-					resolve(res.data as Data<T>)
+					return resolve(res.data as Data<T>)
 				} else if (res.statusCode === 401) {
 					// 401错误  -> 清理用户信息，跳转到登录页
 				} else {
 					// 其他错误 -> 根据后端错误信息轻提示
 					uni.showToast({
 						icon: 'none',
-						title: (res.data as Data<T>).msg || '请求错误',
+						title: (res.data as Data<T>).msg || '请求错误'
 					})
-					reject(res)
+					return reject(res)
 				}
 			},
 			// 响应失败
 			fail(err) {
 				uni.showToast({
 					icon: 'none',
-					title: '网络错误，换个网络试试',
+					title: '网络错误，换个网络试试'
 				})
-				reject(err)
-			},
+				return reject(err)
+			}
 		})
 	})
 }
+
+export default request

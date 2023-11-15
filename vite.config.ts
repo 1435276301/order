@@ -8,13 +8,13 @@ import * as path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
 	build: {
-		sourcemap: process.env.NODE_ENV === 'development',
+		sourcemap: process.env.NODE_ENV === 'development'
 	},
 	resolve: {
 		alias: {
-			'@': `${path.resolve(__dirname, 'src')}/`,
+			'@': path.resolve('./src')
 		},
-		extensions: ['.mjs', '.js', '.jsx', '.json', '.vue'],
+		extensions: ['.mjs', '.js', '.jsx', '.json', '.vue']
 	},
 	plugins: [
 		uni(),
@@ -24,13 +24,13 @@ export default defineConfig({
 			dts: 'src/auto-imports.d.ts',
 			// 如有用到eslint记得加上写段，没有用到可以忽略
 			eslintrc: {
-				enabled: true,
+				enabled: true
 			},
 			include: [
 				/\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
 				/\.vue$/,
-				/\.vue\?vue/, // .vue
-			],
-		}),
-	],
+				/\.vue\?vue/ // .vue
+			]
+		})
+	]
 })
