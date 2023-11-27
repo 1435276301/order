@@ -1,5 +1,6 @@
 // 请求基地址
-const baseUrl = 'http://127.0.0.1:3030'
+const baseIp = import.meta.env.BASE_IP
+const baseUrl = baseIp
 // 拦截器配置
 const httpInterceptor = {
 	// 拦截前触发

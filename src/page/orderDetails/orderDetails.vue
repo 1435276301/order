@@ -52,13 +52,11 @@ const order = ref()
 const orderList = ref<any>([])
 onLoad((options) => {
 	order.value = JSON.parse(decodeURIComponent(options!.order))
-
 	orderList.value = JSON.parse(order.value.orderList).reverse()
-	orderList.value.forEach((item: any) => {
-		item.children.forEach(async (item1: any) => {
-			item1.sold = item1.count
-			await updateSoldCountAPI(item1.id, item1.sold)
-		})
+
+	orderList.value[0].children.forEach(async (item1: any) => {
+		item1.sold = item1.count
+		await updateSoldCountAPI(item1.id, item1.sold)
 	})
 })
 

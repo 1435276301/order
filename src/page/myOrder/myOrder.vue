@@ -39,7 +39,7 @@ const getUserOrder = async (userId: number) => {
 		item.time = dayjs.unix(Number(item.orderNumber) / 1000).format('YYYY-MM-DD HH:mm:ss')
 	})
 
-	userOrderData.value = res.data.reverse()
+	userOrderData.value = res.data
 }
 </script>
 

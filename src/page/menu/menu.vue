@@ -220,7 +220,6 @@ const chooseWell = async () => {
 							order.value.time = dayjs(order.value.orderNumber).format('YYYY-MM-DD HH:mm:ss')
 							order.value.table = table.value
 							order.value.people = people.value
-
 							return resolve(success.errMsg)
 						}
 					}

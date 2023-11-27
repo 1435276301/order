@@ -27,7 +27,6 @@
 
 <script lang="ts" setup>
 import { addUserAPI } from '@/api/user'
-import Loading from '@/components/Loading.vue'
 const count = ref(1)
 const numberOfPeople = (item: number, index: number) => {
 	count.value = item
@@ -41,33 +40,34 @@ onLoad((query) => {
 })
 const isActive = ref(0)
 const getUserInfo = async () => {
-	if (!uni.getStorageSync('token')) {
-		await new Promise((resolve) => {
-			uni.getUserProfile({
-				desc: '获取用户信息',
-				success: (res) => {
-					console.log(res)
+	await new Promise((resolve) => {
+		uni.getUserProfile({
+			desc: '获取用户信息',
+			success: (res) => {
+				console.log(res)
 
-					uni.login({
-						success: (res) => {
-							uni
-								.request({
-									url:
-										'https://api.weixin.qq.com/sns/jscode2session?appid=wxc9051b6bfbad3812&secret=931489be1ef8678add17db4f8c5927f3&grant_type=authorization_code&js_code=' +
-										res.code
-								})
-								.then(async (res) => {
-									loading.value = true
-									resolve(uni.setStorageSync('token', (res.data as any).openid))
-									await addUserAPI(uni.getStorageSync('token'))
-									loading.value = false
-								})
-						}
-					})
-				}
-			})
+				uni.login({
+					success: (res) => {
+						uni
+							.request({
+								url:
+									'https://api.weixin.qq.com/sns/jscode2session?appid=wxc9051b6bfbad3812&secret=931489be1ef8678add17db4f8c5927f3&grant_type=authorization_code&js_code=' +
+									res.code
+							})
+							.then(async (res) => {
+								loading.value = true
+								console.log((res.data as any).openid)
+
+								resolve(uni.setStorageSync('token', (res.data as any).openid))
+								await addUserAPI(uni.getStorageSync('token'))
+								loading.value = false
+							})
+					}
+				})
+			}
 		})
-	}
+	})
+
 	uni.navigateTo({
 		url: `../menu/menu?scene=${scene.value}&count=${count.value}`
 	})
@@ -78,7 +78,7 @@ const getUserInfo = async () => {
 .tableNumber {
 	width: 100vw;
 	height: 100vh;
-	background: url(../../assets/1.JPEG) no-repeat;
+	background: url(../../assets/1.JPEG);
 	background-size: cover;
 	opacity: 0.8;
 	display: flex;
