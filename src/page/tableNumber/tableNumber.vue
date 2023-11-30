@@ -22,11 +22,12 @@
 		</view>
 	</view>
 
-	<Loading :loading="loading" />
+	<!-- <Loading :loading="loading" /> -->
 </template>
 
 <script lang="ts" setup>
 import { addUserAPI } from '@/api/user'
+// import  Loading  from 'uview-plus'
 const count = ref(1)
 const numberOfPeople = (item: number, index: number) => {
 	count.value = item
@@ -45,7 +46,6 @@ const getUserInfo = async () => {
 			desc: '获取用户信息',
 			success: (res) => {
 				console.log(res)
-
 				uni.login({
 					success: (res) => {
 						uni
@@ -57,7 +57,6 @@ const getUserInfo = async () => {
 							.then(async (res) => {
 								loading.value = true
 								console.log((res.data as any).openid)
-
 								resolve(uni.setStorageSync('token', (res.data as any).openid))
 								await addUserAPI(uni.getStorageSync('token'))
 								loading.value = false
@@ -67,7 +66,6 @@ const getUserInfo = async () => {
 			}
 		})
 	})
-
 	uni.navigateTo({
 		url: `../menu/menu?scene=${scene.value}&count=${count.value}`
 	})
