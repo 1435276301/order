@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
+import img from '@/assets/2.png'
 const title = ref('请使用微信扫一扫扫描桌上的二维码')
 const onScan = () => {
 	uni.scanCode({
