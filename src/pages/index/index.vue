@@ -53,8 +53,7 @@ const onScan = () => {
 .content {
 	width: 100vw;
 	height: 100vh;
-	background: url(../../assets/2.JPEG) no-repeat;
-	background-size: cover;
+	background-image: url('@/assets/2.png') no-repeat;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
